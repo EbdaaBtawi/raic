@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}RAIC | Robotics & AI Club{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+
+ <!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HH83HRVX39"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HH83HRVX39');
+</script>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">⚡RAIC</div>
+  <ul>
+    <li><a href="/" {% if request.endpoint=='index' %}class="active"{% endif %}>Home</a></li>
+    <li><a href="/events" {% if request.endpoint=='events' %}class="active"{% endif %}>Events</a></li>
+    <li><a href="/achievements" {% if request.endpoint=='achievements' %}class="active"{% endif %}>Achievements</a></li>
+    <li><a href="/leaderboard" {% if request.endpoint=='leaderboard' %}class="active"{% endif %}>Leaderboard</a></li>
+    <li><a href="/feedback" {% if request.endpoint=='feedback' %}class="active"{% endif %}>Feedback</a></li>
+    <li><a href="/register" {% if request.endpoint=='register' %}class="active"{% endif %}>Join Now</a></li>
+  </ul>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <p>© 2025 RAIC · Robotics & AI Club · Umm Al-Qura University</p>
+  <div style="margin-top:8px">
+    <a href="https://x.com/RAIC_UQU" target="_blank">X @RAIC_UQU</a>
+    <a href="https://www.linkedin.com/company/raicuqu" target="_blank">LinkedIn</a>
+    <a href="https://www.tiktok.com/@RAIC_UQU" target="_blank">TikTok</a>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

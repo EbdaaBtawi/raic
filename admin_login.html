@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login | RAIC</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">RAIC Admin</div>
+</nav>
+
+<div style="max-width:420px;margin:80px auto;padding:0 1rem">
+  <div class="form-box">
+    <h2 style="color:#071a2f;margin-bottom:6px">Admin Login</h2>
+    <p style="color:#888;font-size:14px;margin-bottom:20px">
+      Enter the admin password to access the dashboard.
+    </p>
+    {% if error %}
+      <div class="alert error" style="margin-bottom:16px">{{ error }}</div>
+    {% endif %}
+    <form method="POST">
+      <label style="font-size:13px;font-weight:bold;color:#333">Password</label>
+      <input type="password" name="password" placeholder="Enter admin password"
+             autofocus style="margin-top:6px"/>
+      <button type="submit" class="btn"
+              style="width:100%;border:none;cursor:pointer;margin-top:12px">
+        Login
+      </button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <p>2025 RAIC - Umm Al-Qura University</p>
+</footer>
+
+</body>
+</html>

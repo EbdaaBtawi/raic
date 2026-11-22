@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Leaderboard | RAIC{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>🏆 Leaderboard</h1>
+  <p>Top members ranked by points earned through events and activities.</p>
+</div>
+
+<div class="stats" style="padding-bottom:20px">
+  <div class="stat-card">
+    <h3>Newcomer</h3>
+    <p style="font-size:20px">0+ pts</p>
+  </div>
+  <div class="stat-card">
+    <h3>Spark</h3>
+    <p style="font-size:20px">20+ pts</p>
+  </div>
+  <div class="stat-card">
+    <h3>Builder</h3>
+    <p style="font-size:20px">50+ pts</p>
+  </div>
+  <div class="stat-card">
+    <h3>Maker</h3>
+    <p style="font-size:20px">100+ pts</p>
+  </div>
+  <div class="stat-card" style="border:2px solid #fbbf24;background:#fffbeb">
+    <h3>Legend</h3>
+    <p style="font-size:20px">200+ pts</p>
+  </div>
+</div>
+
+<div class="lb-section">
+  {% if members %}
+    {% for m in members %}
+    <div class="lb-box">
+      <div class="lb-rank">
+        {% if loop.index == 1 %}🥇
+        {% elif loop.index == 2 %}🥈
+        {% elif loop.index == 3 %}🥉
+        {% else %}#{{ loop.index }}{% endif %}
+      </div>
+      <div class="lb-info">
+        <strong>{{ m.full_name }}</strong>
+        <small>{{ m.major }} · {{ m.year }}</small>
+      </div>
+      <span class="lb-badge">{{ m.badge }}</span>
+      <span class="lb-pts">{{ m.points }} pts</span>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="form-box" style="text-align:center">
+      <p style="color:#888">No members yet. <a href="/register" style="color:#0e7490">Be the first to join!</a></p>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

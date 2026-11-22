@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Join RAIC{% endblock %}
+{% block content %}
+
+<div class="form-section">
+  <div>
+    <h1>Join the Club</h1>
+    <p style="color:#555;margin-top:10px;line-height:1.7">
+      Become part of UQU's Robotics & AI Club. Fill in your details and earn <strong>10 welcome points</strong> instantly.
+    </p>
+    <div style="margin-top:30px">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-icon">🤖</div>
+        <h3>Hands-on Projects</h3>
+        <p>Build real robots and AI systems.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-icon">🏆</div>
+        <h3>Compete Globally</h3>
+        <p>Represent UQU in international competitions.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📜</div>
+        <h3>Certifications</h3>
+        <p>18+ certified courses through Oracle partnership.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    {% if not reg_open %}
+      <div class="alert warning">Registration is currently closed. Follow our social media for updates.</div>
+    {% else %}
+      <div id="notifyBox" class="notify-box"></div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="messages">
+            {% for cat, msg in messages %}
+              <div class="alert {{ cat }}">{{ msg }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form class="form-box" method="POST" action="/register" onsubmit="return handleJoin(event)">
+        <label>Full Name *</label>
+        <input type="text" id="full_name" name="full_name" placeholder="Ahmad Al-Zahrani"/>
+
+        <label>Student ID *</label>
+        <input type="text" id="student_id" name="student_id" placeholder="441XXXXXXX"/>
+
+        <label>University Email *</label>
+        <input type="email" id="email" name="email" placeholder="s441XXXXX@uqu.edu.sa"/>
+
+        <label>Major *</label>
+        <input type="text" id="major" name="major" placeholder="Computer Science"/>
+
+        <label>Year *</label>
+        <select id="year" name="year">
+          <option value="">Select year...</option>
+          <option>1st Year</option>
+          <option>2nd Year</option>
+          <option>3rd Year</option>
+          <option>4th Year</option>
+          <option>Graduate</option>
+        </select>
+
+        <label>Primary Interest *</label>
+        <select id="interest" name="interest">
+          <option value="">Select interest...</option>
+          <option>Machine Learning</option>
+          <option>Computer Vision</option>
+          <option>Natural Language Processing</option>
+          <option>Robotics & Automation</option>
+          <option>Data Science</option>
+          <option>Deep Learning</option>
+          <option>IoT & Embedded Systems</option>
+        </select>
+
+        <span id="joinError" class="error-text"></span>
+        <button type="submit" class="btn" style="margin-top:0">Join RAIC — Get 10 Points 🚀</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function handleJoin(e) {
+  e.preventDefault();
+  if (!validateJoinForm()) return;
+
+  var btn = e.target.querySelector('button[type=submit]');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  var body = {
+    full_name:  document.getElementById('full_name').value.trim(),
+    student_id: document.getElementById('student_id').value.trim(),
+    email:      document.getElementById('email').value.trim(),
+    major:      document.getElementById('major').value.trim(),
+    year:       document.getElementById('year').value,
+    interest:   document.getElementById('interest').value,
+  };
+
+  fetch('/register', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if (data.success) {
+      showNotify('Welcome to RAIC, ' + body.full_name + '!');
+      e.target.reset();
+      trackGoal('member_registration');
+    } else {
+      var err = document.getElementById('joinError');
+      if (data.errors) {
+        err.textContent = Object.values(data.errors).join(' ');
+      } else {
+        err.textContent = data.message || 'Something went wrong.';
+      }
+    }
+    btn.textContent = 'Join RAIC — Get 10 Points 🚀';
+    btn.disabled = false;
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Events | RAIC{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Events & Activities</h1>
+  <p>Workshops · Competitions · Talks · Meetings</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterEvents(this,'all')">All</button>
+  <button class="filter-btn" onclick="filterEvents(this,'workshop')">Workshops</button>
+  <button class="filter-btn" onclick="filterEvents(this,'competition')">Competitions</button>
+  <button class="filter-btn" onclick="filterEvents(this,'talk')">Talks</button>
+  <button class="filter-btn" onclick="filterEvents(this,'meeting')">Meetings</button>
+</div>
+
+<div class="event-list" id="eventGrid">
+  {% for e in events %}
+  <div class="event-card" data-type="{{ e.event_type }}">
+    <span class="event-tag tag-{{ e.event_type }}">{{ e.event_type }}</span>
+    <h3>{{ e.title }}</h3>
+    <p>{{ e.description }}</p>
+    <div class="meta">
+  {{ e.date }} &nbsp; {{ e.location }} &nbsp; {{ e.registered }} attended
+</div>
+    <span class="pts">+{{ e.points }} pts</span>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterEvents(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('#eventGrid .event-card').forEach(function(card){
+    card.style.display = (type === 'all' || card.dataset.type === type) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

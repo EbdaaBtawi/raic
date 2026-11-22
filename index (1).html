@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}RAIC | Robotics & AI Club - UQU{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="badge">
+      {% if reg_open %}● Registration Open{% else %}● Registration Closed{% endif %}
+    </div>
+    <h1>Robotics &<br>AI Club</h1>
+    <p>UQU's student club for building the next generation of AI and robotics innovators. Hands-on workshops, real competitions, global achievements.</p>
+    {% if reg_open %}
+      <a href="/register" class="btn">Join the Club</a>
+    {% endif %}
+    <a href="/events" class="btn" style="margin-right:12px;background:#071a2f;color:white;">View Events</a>
+  </div>
+  <div class="hero-card">
+    <h3 style="color:#0e7490">Club Stats</h3>
+    <div class="points" id="memberCount">0</div>
+    <p style="color:#888;margin-top:6px">Registered Members</p>
+    <hr style="margin:16px 0;border-color:#e5e7eb">
+    <p><strong style="color:#0e7490">3</strong> &nbsp; MRC World Medals</p>
+    <p style="margin-top:8px"><strong style="color:#0e7490">+6</strong> &nbsp; Events This Semester</p>
+  </div>
+</section>
+
+<!-- WHAT WE DO -->
+<div class="cards">
+  <div class="card">
+    <div class="card-icon">🤖</div>
+    <h3>Robotics Workshops</h3>
+    <p>From circuit soldering to building autonomous robots. Hands-on sessions every semester.</p>
+  </div>
+  <div class="card">
+    <div class="card-icon">🧠</div>
+    <h3>AI & Machine Learning</h3>
+    <p>Deep learning, NLP, computer vision — practical sessions with real projects.</p>
+  </div>
+  <div class="card">
+    <div class="card-icon">🏆</div>
+    <h3>Global Competitions</h3>
+    <p>We represented UQU at MRC World Robotics Competition in Greece and won 3 medals.</p>
+  </div>
+</div>
+
+<!-- LATEST EVENTS -->
+<div style="padding: 0 8% 10px">
+  <h2 style="color:#071a2f;margin-bottom:20px">Latest Events</h2>
+</div>
+<div class="event-list">
+  {% for e in events %}
+  <div class="event-card">
+    <span class="event-tag tag-{{ e.event_type }}">{{ e.event_type }}</span>
+    <h3>{{ e.title }}</h3>
+    <p>{{ e.description[:100] }}...</p>
+    <div class="meta">{{ e.date }} &nbsp; {{ e.location }}</div>
+    <span class="pts">+{{ e.points }} pts</span>
+  </div>
+  {% endfor %}
+</div>
+<div style="padding:10px 8% 30px">
+  <a href="/events" class="btn">See All Events</a>
+</div>
+
+<!-- BADGES -->
+<div class="badges-section">
+  <h2>Earn Points. Unlock Badges.</h2>
+  <p style="color:#666;margin-bottom:20px">Every event you attend earns points and moves you up the leaderboard.</p>
+  <div class="badges-row">
+    <div class="badge-card">
+      <div class="badge-icon">🌱</div>
+      <strong>Newcomer</strong>
+      <small>0 pts</small>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card">
+      <div class="badge-icon">⚡</div>
+      <strong>Spark</strong>
+      <small>20 pts</small>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card">
+      <div class="badge-icon">🔋</div>
+      <strong>Builder</strong>
+      <small>50 pts</small>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card">
+      <div class="badge-icon">🤖</div>
+      <strong>Maker</strong>
+      <small>100 pts</small>
+    </div>
+    <div class="badge-arrow">→</div>
+    <div class="badge-card gold">
+      <div class="badge-icon">🏆</div>
+      <strong>Legend</strong>
+      <small>200 pts</small>
+    </div>
+  </div>
+  <a href="/leaderboard" class="btn" style="margin-top:24px;display:inline-block">View Leaderboard</a>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var target = {{ members }};
+  var el = document.getElementById('memberCount');
+  var count = 0;
+  var step = Math.ceil(target / 50) || 1;
+  var timer = setInterval(function() {
+    count = Math.min(count + step, target);
+    el.textContent = count;
+    if (count >= target) clearInterval(timer);
+  }, 30);
+</script>
+{% endblock %}

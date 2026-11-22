@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Feedback | RAIC{% endblock %}
+{% block content %}
+
+<div class="form-section">
+  <div>
+    <h1>Feedback</h1>
+    <p style="color:#555;margin-top:10px;line-height:1.7">
+      Your opinion helps us improve RAIC. We read every message and use it to make the club better.
+    </p>
+    <div class="card" style="margin-top:30px">
+      <h3>Contact Us</h3>
+      <p style="margin-top:10px;font-size:14px;color:#555">
+        📱 X: <a href="https://x.com/RAIC_UQU" target="_blank" style="color:#0e7490">@RAIC_UQU</a><br><br>
+        💼 LinkedIn: <a href="https://www.linkedin.com/company/raicuqu" target="_blank" style="color:#0e7490">raicuqu</a><br><br>
+        🎵 TikTok: <a href="https://www.tiktok.com/@RAIC_UQU" target="_blank" style="color:#0e7490">@RAIC_UQU</a>
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <div id="notifyBox" class="notify-box"></div>
+    <form class="form-box" onsubmit="return handleFeedback(event)">
+      <label>Name *</label>
+      <input type="text" id="feedback_name" placeholder="Ahmad Al-Zahrani"/>
+
+      <label>Email *</label>
+      <input type="email" id="feedback_email" placeholder="you@uqu.edu.sa"/>
+
+      <label>Category</label>
+      <select id="category">
+        <option>General</option>
+        <option>Events</option>
+        <option>Website</option>
+        <option>Suggestion</option>
+      </select>
+
+      <label>Rating *</label>
+      <div class="stars" id="starsBox">
+        <button type="button" class="star" data-v="1">★</button>
+        <button type="button" class="star" data-v="2">★</button>
+        <button type="button" class="star" data-v="3">★</button>
+        <button type="button" class="star" data-v="4">★</button>
+        <button type="button" class="star" data-v="5">★</button>
+      </div>
+      <input type="hidden" id="rating"/>
+
+      <label>Message *</label>
+      <textarea id="message" placeholder="Share your thoughts, ideas or suggestions..."></textarea>
+
+      <span id="feedbackError" class="error-text"></span>
+      <button type="submit" class="btn" style="margin-top:0">Send Feedback</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+var stars = document.querySelectorAll('.star');
+var ratingEl = document.getElementById('rating');
+stars.forEach(function(s){
+  s.addEventListener('click', function(){
+    var v = +s.dataset.v;
+    ratingEl.value = v;
+    stars.forEach(function(x){ x.classList.toggle('on', +x.dataset.v <= v); });
+  });
+  s.addEventListener('mouseenter', function(){
+    stars.forEach(function(x){ x.classList.toggle('hover', +x.dataset.v <= +s.dataset.v); });
+  });
+  s.addEventListener('mouseleave', function(){
+    stars.forEach(function(x){ x.classList.remove('hover'); });
+  });
+});
+
+function handleFeedback(e) {
+  e.preventDefault();
+  if (!validateFeedbackForm()) return;
+
+  var body = {
+    name:     document.getElementById('feedback_name').value.trim(),
+    email:    document.getElementById('feedback_email').value.trim(),
+    category: document.getElementById('category').value,
+    message:  document.getElementById('message').value.trim(),
+    rating:   ratingEl.value,
+  };
+
+  var btn = e.target.querySelector('button[type=submit]');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  fetch('/feedback', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if (data.success) {
+      var box = document.getElementById('notifyBox');
+      box.textContent = 'Thank you for your feedback!';
+      box.style.display = 'block';
+      e.target.reset();
+      ratingEl.value = '';
+      stars.forEach(function(x){ x.classList.remove('on'); });
+      trackGoal('feedback_submitted');
+    } else {
+      document.getElementById('feedbackError').textContent = data.message || 'Error sending feedback.';
+    }
+    btn.textContent = 'Send Feedback';
+    btn.disabled = false;
+  });
+}
+</script>
+{% endblock %}
