@@ -5,17 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{% block title %}RAIC | Robotics & AI Club{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
-  <script src="{{ url_for('static', filename='main.js') }}"></script>
 
- <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HH83HRVX39"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HH83HRVX39"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-HH83HRVX39');
-</script>
+    gtag('config', 'G-HH83HRVX39');
+  </script>
 
   {% block head %}{% endblock %}
 </head>
